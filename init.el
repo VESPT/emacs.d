@@ -12,6 +12,7 @@
 ;; Without this comment emacs25 adds (package-initialize) here
 ;; (package-initialize)
 
+;; Spacemacsの設定
 (setq gc-cons-threshold 100000000)
 
 (defconst spacemacs-version         "0.105.21" "Spacemacs version.")
@@ -29,3 +30,20 @@
   (spacemacs/setup-startup-hook)
   (require 'server)
   (unless (server-running-p) (server-start)))
+
+;; 設定ファイルを別の場所へ置く設定
+(when load-file-name
+  (setq user-emacs-directory (file-name-directory load-file-name)))
+
+;; el-getを有効にする設定
+(add-to-list 'load-path (locate-user-emacs-file "el-get/el-get"))
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+;; インストールするパッケージを指定
+(el-get-bundle auto-complete)	
+
